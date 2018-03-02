@@ -12,29 +12,69 @@ public class Move : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
+   
 	void Update () {
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if (transform.position.x >= -9)
+            if (GridManager.GetInstance().canLeft(transform))
             {
                 transform.position += new Vector3(-1, 0, 0);
             }
         }
+
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            if (transform.position.x <= 9)
+            if (GridManager.GetInstance().canRight(transform))
             {
                 transform.position += new Vector3(1, 0, 0);
             }
         }
+
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            transform.Rotate(0, 0, -90);
+            if (GridManager.GetInstance().canRotate(transform))
+            {
+                
+            }
         }
+
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Time.time - lastTime >= 1)
         {
-            transform.position += new Vector3(0, -1, 0);
             lastTime = Time.time;
+
+            if (GridManager.GetInstance().canDown(transform))
+            {              
+                transform.position += new Vector3(0, -1, 0);              
+            }
+            else
+            {
+                brickFinish();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            while(GridManager.GetInstance().canDown(transform))
+            {
+                transform.position += new Vector3(0, -1, 0);
+            }
+            brickFinish();
         }
     }
+
+    public void brickFinish()
+    {
+        int x = Mathf.RoundToInt(transform.position.x);
+        int y = Mathf.RoundToInt(transform.position.y);
+        //设置数据
+        GridManager.GetInstance().setData(transform);
+        //移除组件
+        Destroy(transform.GetComponent<Move>());
+        //检测是否可移除方块
+        GridManager.GetInstance().deleteFullRows();
+
+        //播放下一个俄罗斯方块
+        FindObjectOfType<Spawner>().PlayNext();
+    }
+
 }

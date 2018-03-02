@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class spawner : MonoBehaviour {
+public class Spawner : MonoBehaviour {
 
 
     public GameObject[] groups;
     // Use this for initialization
     void Start () {
-        Play();
+        PlayNext();
     }
 	
 	// Update is called once per frame
@@ -18,12 +18,10 @@ public class spawner : MonoBehaviour {
     /// <summary>
     /// 播放
     /// </summary>
-    public void Play()
+    public void PlayNext()
     {
         int i = Random.Range(0, groups.Length);
         GameObject ins = Instantiate(groups[i], transform.position, Quaternion.identity) as GameObject;
         ins.AddComponent<Move>();
     }
-
-
 }

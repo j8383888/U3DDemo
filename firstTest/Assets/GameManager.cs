@@ -1,21 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GameManager :MonoBehaviour
+﻿public class GameManager
 { 
-
+    //单例
     public static GameManager instance;
+    //ui表现
+    public UI GUIManager;
 
+    public GameManager()
+    {
+        GUIManager = new UI();
+    }
 
-    public GameManager getInstance()
+    public static GameManager getInstance()
     {
         if (instance == null)
         {
-            instance = this;
+            instance = new GameManager();
         }
-          return instance;
-    }
-
-    
+        return instance;
+    }  
 }
